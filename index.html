@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CANSI ADVOGADOS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* RESET E ESTILOS BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* BARRA SUPERIOR FIXA */
+        .navbar {
+            position: fixed;
+            top: -70px;
+            left: 0;
+            width: 100%;
+            background-color: rgba(51, 51, 51, 0.8); /* Cinza escuro com transparência */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            z-index: 1000;
+            transition: top 0.3s ease;
+        }
+
+        .navbar.visible {
+            top: 0;
+        }
+
+        .navbar-logo {
+            height: 40px;
+            transition: transform 0.3s;
+        }
+
+        .navbar-logo:hover {
+            transform: scale(1.05);
+        }
+
+        /* ÍCONES REDES SOCIAIS NO CABEÇALHO */
+        .header-social {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 2;
+        }
+
+        .header-social a {
+            color: white;
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .header-social a:hover {
+            transform: scale(1.1);
+        }
+
+        /* ÍCONE MENU HAMBURGUER */
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 30px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* MENU OFF-CANVAS */
+        .offcanvas-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 999;
+            transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            padding: 80px 20px 20px;
+        }
+
+        .offcanvas-menu.open {
+            right: 0;
+        }
+
+        .menu-links {
+            list-style: none;
+        }
+
+        .menu-links li {
+            margin-bottom: 25px;
+        }
+
+        .menu-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .menu-links a:hover {
+            color: #aaaaaa;
+        }
+
+        /* OVERLAY */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* CABEÇALHO PRINCIPAL */
+        .cabecalho {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cabecalho-gif {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .logo {
+            width: 600px;
+            max-width: 90%;
+            height: auto;
+        }
+
+        /* SEÇÃO APRESENTAÇÃO */
+        .apresentacao {
+            background-color: #FFFFFF;
+            padding: 50px 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .apresentacao-conteudo {
+            max-width: 800px;
+            margin: 0 auto;
+            color: black;
+        }
+
+        .titulo-escritorio {
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .texto-apresentacao {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* SEÇÃO APRESENTAÇÃO 2 COM MAPA */
+        .apresentacao-2 {
+            background-color: #FFFFFF;
+            padding: 50px 20px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .apresentacao-2-container {
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .mapa-container {
+            flex: 1;
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mapa-brasil {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+        }
+
+        .apresentacao-2-conteudo {
+            flex: 1;
+            padding-left: 50px;
+            color: black;
+        }
+
+        /* SEÇÃO ATUAÇÃO */
+        #atuacao {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* VERSÃO DESKTOP */
+        @media (min-width: 769px) {
+            .mobile-only-container {
+                display: none !important;
+            }
+
+            .container {
+                display: flex;
+                width: 100vw;
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .content-block {
+                position: relative;
+                flex: 1;
+                height: 100vh;
+                background-size: cover;
+                background-position: center;
+                clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
+                text-align: center;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: transform 0.3s;
+                overflow: hidden;
+            }
+
+            .content-block:hover {
+                transform: scale(1.05);
+                z-index: 10;
+            }
+
+            .content-block .button {
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .content-block:hover .button {
+                opacity: 1;
+            }
+
+            .overlay-desktop {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease-in-out;
+                padding: 20px;
+            }
+
+            .title {
+                font-size: 28px;
+                font-weight: bold;
+                color: white;
+                text-align: center;
+                text-transform: uppercase;
+                line-height: 1.2;
+                max-width: 90%;
+                margin-bottom: 20px;
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            }
+
+            .agronegocio {
+                font-size: 21px;
+            }
+
+            .desportivo, .empresarial {
+                font-size: 24px;
+            }
+
+            .familia-sucessoes {
+                font-size: 24px;
+            }
+
+            .button {
+                background-color: transparent;
+                color: white;
+                padding: 12px 18px;
+                border: 2px solid white;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 18px;
+                transition: all 0.3s ease-in-out;
+                margin-top: 12px;
+                text-decoration: none;
+            }
+
+            .button:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+                transform: scale(1.05);
+            }
+        }
+
+        /* VERSÃO MOBILE */
+        @media (max-width: 768px) {
+            .container {
+                display: none !important;
+            }
+
+            .mobile-only-container {
+                display: block;
+                width: 100vw;
+                height: 100vh;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .carousel {
+                width: 100%;
+                height: 100%;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .carousel-inner {
+                display: flex;
+                transition: transform 0.5s ease;
+                height: 100%;
+            }
+
+            .carousel-item {
+                min-width: 100%;
+                height: 100%;
+                position: relative;
+            }
+
+            .carousel-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                position: absolute;
+            }
+
+            .dark-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+
+            .carousel-content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 90%;
+                text-align: center;
+                color: white;
+            }
+
+            .carousel-title {
+                font-size: 24px;
+                font-weight: bold;
+                text-transform: uppercase;
+                margin-bottom: 30px;
+                line-height: 1.3;
+            }
+
+            .btn-saiba-mais {
+                background: transparent;
+                border: 2px solid white;
+                color: white;
+                padding: 10px 25px;
+                font-size: 16px;
+                text-transform: uppercase;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: all 0.3s;
+            }
+
+            .btn-saiba-mais:hover {
+                background: rgba(255, 255, 255, 0.2);
+            }
+
+            .carousel-indicators {
+                position: absolute;
+                bottom: 10px;
+                left: 0;
+                right: 0;
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .indicator {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.5);
+                cursor: pointer;
+            }
+
+            .indicator.active {
+                background-color: white;
+            }
+
+            .carousel-control {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 40px;
+                height: 40px;
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+                z-index: 10;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+            }
+
+            .carousel-control:hover {
+                background: rgba(255, 255, 255, 0.3);
+            }
+
+            .carousel-control.prev {
+                left: 15px;
+            }
+
+            .carousel-control.next {
+                right: 15px;
+            }
+
+            .navbar {
+                padding: 12px 20px;
+            }
+            
+            .navbar-logo {
+                height: 35px;
+            }
+            
+            .offcanvas-menu {
+                width: 250px;
+                padding: 70px 15px 15px;
+            }
+
+            .header-social {
+                top: 15px;
+                left: 15px;
+                gap: 10px;
+            }
+
+            .header-social a {
+                font-size: 18px;
+            }
+
+            /* Estilos mobile para a seção apresentacao-2 */
+            .apresentacao-2-container {
+                flex-direction: column;
+            }
+
+            .mapa-container {
+                width: 100%;
+                height: 200px;
+                margin-bottom: 20px;
+            }
+
+            .mapa-brasil {
+                max-width: 250px;
+            }
+
+            .apresentacao-2-conteudo {
+                padding-left: 0;
+                text-align: justified;
+            }
+        }
+
+        /* SEÇÃO LIVROS */
+        .livros-container {
+            width: 100%;
+            text-align: center;
+            padding: 0;
+            margin: 0 auto;
+        }
+
+        .livros-container img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* SEÇÃO CONTATO */
+        #contato {
+            background-color: #777777;
+            padding: 50px 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .contato-conteudo {
+            max-width: 800px;
+            margin: 0 auto;
+            color: white;
+        }
+
+        .titulo-contato {
+            font-weight: bold;
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+
+        .redes-sociais {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .rede-social {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+        .rede-social:hover {
+            transform: translateY(-5px);
+        }
+
+        .rede-social i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .rede-social span {
+            font-size: 14px;
+        }
+
+        /* RODAPÉ */
+        footer {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .footer-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .footer-name {
+            font-size: 16px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .footer-oab {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .footer-copyright {
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+        /* MODAIS */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            width: 80%;
+            max-width: 900px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .modal-image-container {
+            position: relative;
+            width: 40%;
+            overflow: hidden;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            text-transform: uppercase;
+            text-align: center;
+            width: 90%;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-text {
+            width: 60%;
+            padding: 40px;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: #333;
+            font-size: 35px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* MODAL MOBILE */
+        .mobile-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mobile-modal-content {
+            width: 90%;
+            height: 75%;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .mobile-modal-image {
+            width: 100%;
+            height: 25%;
+            object-fit: cover;
+        }
+
+        .mobile-modal-title {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 20px;
+            text-transform: uppercase;
+            text-align: center;
+            width: 90%;
+        }
+
+        .mobile-modal-text {
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+            height: calc(75% - 40px);
+            overflow-y: auto;
+        }
+
+        .close-mobile-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- BARRA SUPERIOR FIXA -->
+    <nav class="navbar" id="navbar">
+        <a href="#">
+            <img src="https://i.ibb.co/HpkQybD3/Logo-CANSI-ADVOGADOS.png" alt="CANSI ADVOGADOS" class="navbar-logo">
+        </a>
+        
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+    
+    <!-- MENU OFF-CANVAS -->
+    <div class="offcanvas-menu" id="offcanvasMenu">
+        <ul class="menu-links">
+            <li><a href="#apresentacao">Início</a></li>
+            <li><a href="#atuacao">Atuação</a></li>
+            <li><a href="#contato">Contato</a></li>
+        </ul>
+    </div>
+    
+    <!-- OVERLAY -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- CABEÇALHO PRINCIPAL -->
+    <header class="cabecalho">
+        <!-- ÍCONES REDES SOCIAIS -->
+        <div class="header-social">
+            <a href="https://wa.me/5544999678393" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.instagram.com/cansiadvogados" target="_blank"><i class="fab fa-instagram"></i></a>
+        </div>
+        
+        <img src="https://i.ibb.co/h1gznFPL/6084027-uhd-3840-2160-25fps-ezgif-com-video-to-gif-converter-1.gif" alt="Fundo Animado" class="cabecalho-gif">
+        <div class="logo-container">
+            <img src="https://i.ibb.co/HpkQybD3/Logo-CANSI-ADVOGADOS.png" alt="Logo CANSI ADVOGADOS" class="logo">
+        </div>
+    </header>
+
+    <!-- SEÇÃO APRESENTAÇÃO -->
+    <section id="apresentacao" class="apresentacao">
+        <div class="apresentacao-conteudo">
+            <p class="texto-apresentacao">
+                <span class="titulo-escritorio">CANSI ADVOGADOS</span>
+                é um escritório dedicado em oferecer soluções jurídicas estratégicas e personalizadas, sempre com foco na excelência e na segurança dos interesses de nossos clientes. Atuamos em áreas específicas do Direito, garantindo atendimento técnico e eficaz tanto para pessoas físicas quanto jurídicas. Buscamos não apenas resolver conflitos, mas também atuar de forma preventiva, reduzindo riscos e proporcionando segurança jurídica para nossos clientes.
+            </p>
+        </div>
+    </section>
+
+    <!-- SEÇÃO ATUAÇÃO -->
+    <section id="atuacao">
+        <!-- VERSÃO DESKTOP -->
+        <div class="container" id="carousel">
+            <div class="content-block direito-medico" data-bg="https://i.ibb.co/rGwZyS2q/Direito-M-dico-CANSI-ADVOGADOS.png" style="background-image: url('https://i.ibb.co/rGwZyS2q/Direito-M-dico-CANSI-ADVOGADOS.png');">
+                <div class="overlay-desktop">
+                    <div class="title">DIREITO<br>MÉDICO</div>
+                    <button class="button" onclick="openModal('direito-medico')">Saiba Mais</button>
+                </div>
+            </div>
+
+            <div class="content-block" data-bg="https://i.ibb.co/FLV3G10R/Direito-do-Agroneg-cio-CANSI-ADVOGADOS.png" style="background-image: url('https://i.ibb.co/FLV3G10R/Direito-do-Agroneg-cio-CANSI-ADVOGADOS.png');">
+                <div class="overlay-desktop">
+                    <div class="title">DIREITO DO<br><span class="agronegocio">AGRONEGÓCIO</span></div>
+                    <button class="button" onclick="openModal('agronegocio')">Saiba Mais</button>
+                </div>
+            </div>
+
+            <div class="content-block" data-bg="https://i.ibb.co/gFjPqkfN/Direito-Desportivo-CANSI-ADVOGADOS.png" style="background-image: url('https://i.ibb.co/gFjPqkfN/Direito-Desportivo-CANSI-ADVOGADOS.png');">
+                <div class="overlay-desktop">
+                    <div class="title">DIREITO<br><span class="desportivo">DESPORTIVO</span></div>
+                    <button class="button" onclick="openModal('desportivo')">Saiba Mais</button>
+                </div>
+            </div>
+
+            <div class="content-block" data-bg="https://i.ibb.co/8D6z8dnQ/Direito-de-Fam-lia-CANSI-ADVOGADOS.png" style="background-image: url('https://i.ibb.co/8D6z8dnQ/Direito-de-Fam-lia-CANSI-ADVOGADOS.png');">
+                <div class="overlay-desktop">
+                    <div class="title familia-sucessoes">DIREITO DE<br>FAMÍLIA E<br>SUCESSÕES</div>
+                    <button class="button" onclick="openModal('familia')">Saiba Mais</button>
+                </div>
+            </div>
+
+            <div class="content-block" data-bg="https://i.ibb.co/WvCkyLVf/Direito-Empresarial-CANSI-ADVOGADOS.png" style="background-image: url('https://i.ibb.co/WvCkyLVf/Direito-Empresarial-CANSI-ADVOGADOS.png');">
+                <div class="overlay-desktop">
+                    <div class="title">DIREITO<br><span class="empresarial">EMPRESARIAL</span></div>
+                    <button class="button" onclick="openModal('empresarial')">Saiba Mais</button>
+                </div>
+            </div>
+
+            <div class="content-block" data-bg="https://i.ibb.co/yBWXYffR/Direito-Tribut-rio-CANSI-ADVOGADOS.png" style="background-image: url('https://i.ibb.co/yBWXYffR/Direito-Tribut-rio-CANSI-ADVOGADOS.png');">
+                <div class="overlay-desktop">
+                    <div class="title">DIREITO<br>TRIBUTÁRIO</div>
+                    <button class="button" onclick="openModal('tributario')">Saiba Mais</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VERSÃO MOBILE -->
+        <div class="mobile-only-container">
+            <div class="carousel">
+                <div class="carousel-inner">
+                    <!-- Item 1 - Direito Médico -->
+                    <div class="carousel-item" data-index="0">
+                        <img src="https://i.ibb.co/rGwZyS2q/Direito-M-dico-CANSI-ADVOGADOS.png" alt="Direito Médico" class="carousel-image">
+                        <div class="dark-overlay"></div>
+                        <div class="carousel-content">
+                            <h2 class="carousel-title">DIREITO<br>MÉDICO</h2>
+                            <button class="btn-saiba-mais" onclick="openMobileModal(0)">Saiba Mais</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 - Direito do Agronegócio -->
+                    <div class="carousel-item" data-index="1">
+                        <img src="https://i.ibb.co/FLV3G10R/Direito-do-Agroneg-cio-CANSI-ADVOGADOS.png" alt="Direito do Agronegócio" class="carousel-image">
+                        <div class="dark-overlay"></div>
+                        <div class="carousel-content">
+                            <h2 class="carousel-title">DIREITO DO<br>AGRONEGÓCIO</h2>
+                            <button class="btn-saiba-mais" onclick="openMobileModal(1)">Saiba Mais</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 - Direito Desportivo -->
+                    <div class="carousel-item" data-index="2">
+                        <img src="https://i.ibb.co/gFjPqkfN/Direito-Desportivo-CANSI-ADVOGADOS.png" alt="Direito Desportivo" class="carousel-image">
+                        <div class="dark-overlay"></div>
+                        <div class="carousel-content">
+                            <h2 class="carousel-title">DIREITO<br>DESPORTIVO</h2>
+                            <button class="btn-saiba-mais" onclick="openMobileModal(2)">Saiba Mais</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 4 - Direito de Família e Sucessões -->
+                    <div class="carousel-item" data-index="3">
+                        <img src="https://i.ibb.co/8D6z8dnQ/Direito-de-Fam-lia-CANSI-ADVOGADOS.png" alt="Direito de Família" class="carousel-image">
+                        <div class="dark-overlay"></div>
+                        <div class="carousel-content">
+                            <h2 class="carousel-title">DIREITO DE FAMÍLIA<br>E SUCESSÕES</h2>
+                            <button class="btn-saiba-mais" onclick="openMobileModal(3)">Saiba Mais</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 5 - Direito Empresarial -->
+                    <div class="carousel-item" data-index="4">
+                        <img src="https://i.ibb.co/WvCkyLVf/Direito-Empresarial-CANSI-ADVOGADOS.png" alt="Direito Empresarial" class="carousel-image">
+                        <div class="dark-overlay"></div>
+                        <div class="carousel-content">
+                            <h2 class="carousel-title">DIREITO<br>EMPRESARIAL</h2>
+                            <button class="btn-saiba-mais" onclick="openMobileModal(4)">Saiba Mais</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 6 - Direito Tributário -->
+                    <div class="carousel-item" data-index="5">
+                        <img src="https://i.ibb.co/yBWXYffR/Direito-Tribut-rio-CANSI-ADVOGADOS.png" alt="Direito Tributário" class="carousel-image">
+                        <div class="dark-overlay"></div>
+                        <div class="carousel-content">
+                            <h2 class="carousel-title">DIREITO<br>TRIBUTÁRIO</h2>
+                            <button class="btn-saiba-mais" onclick="openMobileModal(5)">Saiba Mais</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controles do carrossel -->
+                <button class="carousel-control prev" onclick="moveCarousel(-1)">‹</button>
+                <button class="carousel-control next" onclick="moveCarousel(1)">›</button>
+
+                <!-- Indicadores -->
+                <div class="carousel-indicators">
+                    <span class="indicator active" data-index="0"></span>
+                    <span class="indicator" data-index="1"></span>
+                    <span class="indicator" data-index="2"></span>
+                    <span class="indicator" data-index="3"></span>
+                    <span class="indicator" data-index="4"></span>
+                    <span class="indicator" data-index="5"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO APRESENTAÇÃO 2 COM MAPA -->
+    <section class="apresentacao-2">
+        <div class="apresentacao-2-container">
+            <div class="mapa-container">
+                <img src="https://i.ibb.co/SwsttP6K/Design-sem-nome-1.gif" alt="Mapa do Brasil" class="mapa-brasil">
+            </div>
+            <div class="apresentacao-2-conteudo">
+                <p class="texto-apresentacao">
+                    <span class="titulo-escritorio">UM ESCRITÓRIO PERTO DE VOCÊ.</span>
+                    Nosso escritório foi idealizado para atender clientes em todo o Brasil, com eficiência, agilidade e segurança. Nos destacamos por oferecer uma estrutura totalmente adaptada ao ambiente digital, o que permite que o atendimento jurídico seja realizado de forma personalizada e acessível, independentemente da localização do cliente. Utilizamos plataformas seguras e modernas para reuniões, envio de documentos, assinaturas eletrônicas e acompanhamento dos processos, proporcionando praticidade sem abrir mão da qualidade no atendimento. Essa abordagem digital é um dos nossos diferenciais e reforça o compromisso com a inovação e a excelência nos serviços prestados.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALERIA DE LIVROS -->
+    <div class="livros-container">
+        <img src="https://i.ibb.co/jP7zWnLH/Chat-GPT-Image-9-de-abr-de-2025-03-30-08.png" alt="Livros de Direito">
+    </div>
+
+    <!-- SEÇÃO CONTATO -->
+    <section id="contato" class="contato">
+        <div class="contato-conteudo">
+            <h2 class="titulo-contato">Entre em contato e agende seu horário</h2>
+            <div class="redes-sociais">
+                <a href="https://wa.me/5544999678393" target="_blank" class="rede-social">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="https://www.instagram.com/cansiadvogados" target="_blank" class="rede-social">
+                    <i class="fab fa-instagram"></i>
+                    <span>Instagram</span>
+                </a>
+                <a href="https://www.linkedin.com/in/SEULINKEDIN" target="_blank" class="rede-social">
+                    <i class="fab fa-linkedin-in"></i>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="mailto:cansiadvogados@gmail.com" class="rede-social">
+                    <i class="far fa-envelope"></i>
+                    <span>E-mail</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- RODAPÉ -->
+    <footer>
+        <img src="https://i.ibb.co/HpkQybD3/Logo-CANSI-ADVOGADOS.png" alt="Logo Cansi Advogados" class="footer-logo">
+        <div class="footer-name">Luiz Carlos Cansi Junior</div>
+        <div class="footer-oab">OAB/PR 129.578</div>
+        <div class="footer-copyright">&copy; Todos os direitos reservados</div>
+    </footer>
+
+    <!-- MODAIS DESKTOP -->
+    <div id="direito-medico-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-image-container">
+                <img src="https://i.ibb.co/rGwZyS2q/Direito-M-dico-CANSI-ADVOGADOS.png" alt="Direito Médico" class="modal-image">
+                <h2 class="modal-title">DIREITO MÉDICO</h2>
+            </div>
+            <div class="modal-text">
+                <p>O Direito Médico é a área especializada que atua na defesa jurídica dos profissionais e das instituições de saúde. Nossa equipe possui ampla experiência na resolução de conflitos que envolvem a responsabilidade civil médica, hospitalar e odontológica. Oferecemos assessoria jurídica completa para profissionais da saúde, clínicas e hospitais, atuando tanto na prevenção quanto na resolução de litígios. Compreendemos as particularidades do setor da saúde e trabalhamos para proteger os interesses de nossos clientes.</p>
+            </div>
+            <button class="close-modal" onclick="closeModal('direito-medico-modal')">×</button>
+        </div>
+    </div>
+
+    <div id="agronegocio-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-image-container">
+                <img src="https://i.ibb.co/FLV3G10R/Direito-do-Agroneg-cio-CANSI-ADVOGADOS.png" alt="Direito do Agronegócio" class="modal-image">
+                <h2 class="modal-title">DIREITO DO AGRONEGÓCIO</h2>
+            </div>
+            <div class="modal-text">
+                <p>O Direito do Agronegócio abrange todas as questões jurídicas relacionadas à produção agrícola, pecuária e suas cadeias produtivas. A Cansi Advogados atua nesta área com profundo conhecimento das particularidades do setor rural brasileiro. Nossa equipe especializada oferece assessoria completa em contratos agrários, financiamento rural, regularização fundiária, licenciamento ambiental, questões tributárias específicas do setor, e resolução de conflitos agrários.</p>
+            </div>
+            <button class="close-modal" onclick="closeModal('agronegocio-modal')">×</button>
+        </div>
+    </div>
+
+    <div id="desportivo-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-image-container">
+                <img src="https://i.ibb.co/gFjPqkfN/Direito-Desportivo-CANSI-ADVOGADOS.png" alt="Direito Desportivo" class="modal-image">
+                <h2 class="modal-title">DIREITO DESPORTIVO</h2>
+            </div>
+            <div class="modal-text">
+                <p>O Direito Desportivo é o ramo que regula as relações jurídicas no âmbito esportivo. Na Cansi Advogados, nossa equipe especializada atende atletas, clubes, federações e demais entidades esportivas com soluções jurídicas personalizadas. Oferecemos assessoria completa na elaboração e análise de contratos esportivos, transferências de atletas, direitos de imagem, patrocínios, e representação perante tribunais desportivos e entidades reguladoras do esporte.</p>
+            </div>
+            <button class="close-modal" onclick="closeModal('desportivo-modal')">×</button>
+        </div>
+    </div>
+
+    <div id="familia-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-image-container">
+                <img src="https://i.ibb.co/8D6z8dnQ/Direito-de-Fam-lia-CANSI-ADVOGADOS.png" alt="Direito de Família" class="modal-image">
+                <h2 class="modal-title">DIREITO DE FAMÍLIA E SUCESSÕES</h2>
+            </div>
+            <div class="modal-text">
+                <p>O Direito de Família e Sucessões aborda questões relacionadas às relações familiares e ao planejamento sucessório. Na Cansi Advogados, tratamos estes temas com sensibilidade e profissionalismo, buscando soluções que preservem os vínculos familiares. Nossa equipe especializada atua em processos de divórcio e dissolução de união estável, guarda de filhos, pensão alimentícia, investigação de paternidade, e adoção.</p>
+            </div>
+            <button class="close-modal" onclick="closeModal('familia-modal')">×</button>
+        </div>
+    </div>
+
+    <div id="empresarial-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-image-container">
+                <img src="https://i.ibb.co/WvCkyLVf/Direito-Empresarial-CANSI-ADVOGADOS.png" alt="Direito Empresarial" class="modal-image">
+                <h2 class="modal-title">DIREITO EMPRESARIAL</h2>
+            </div>
+            <div class="modal-text">
+                <p>O Direito Empresarial, também conhecido como Direito Comercial, regula as atividades empresariais e as relações entre empresas. Na Cansi Advogados, oferecemos assessoria jurídica completa para empresas de todos os portes e segmentos. Nossa equipe especializada atua na constituição e reestruturação de empresas, elaboração e análise de contratos empresariais, fusões e aquisições, recuperação judicial e falência.</p>
+            </div>
+            <button class="close-modal" onclick="closeModal('empresarial-modal')">×</button>
+        </div>
+    </div>
+
+    <div id="tributario-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-image-container">
+                <img src="https://i.ibb.co/yBWXYffR/Direito-Tribut-rio-CANSI-ADVOGADOS.png" alt="Direito Tributário" class="modal-image">
+                <h2 class="modal-title">DIREITO TRIBUTÁRIO</h2>
+            </div>
+            <div class="modal-text">
+                <p>O Direito Tributário regula a relação jurídica entre o contribuinte e o Estado no que se refere à arrecadação de impostos, taxas e contribuições. Na Cansi Advogados, nossa equipe especializada oferece soluções personalizadas para otimizar a carga tributária de pessoas físicas e jurídicas. Atuamos no planejamento tributário estratégico, análise de regimes fiscais, recuperação de créditos tributários, defesa em processos administrativos e judiciais.</p>
+            </div>
+            <button class="close-modal" onclick="closeModal('tributario-modal')">×</button>
+        </div>
+    </div>
+
+    <!-- MODAL MOBILE -->
+    <div id="mobile-modal" class="mobile-modal">
+        <div class="mobile-modal-content">
+            <img id="modal-image" src="" alt="" class="mobile-modal-image">
+            <h2 id="modal-title" class="mobile-modal-title"></h2>
+            <div id="modal-text" class="mobile-modal-text"></div>
+            <button class="close-mobile-modal" onclick="closeMobileModal()">×</button>
+        </div>
+    </div>
+
+    <!-- FAVICON -->
+    <link rel="icon" href="https://i.ibb.co/wZJb8T2h/Icone-Janela-navegador-CANSI-ADVOGADOS.png" type="image/png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/wZJb8T2h/Icone-Janela-navegador-CANSI-ADVOGADOS.png">
+    <meta name="msapplication-TileImage" content="https://i.ibb.co/wZJb8T2h/Icone-Janela-navegador-CANSI-ADVOGADOS.png">
+    <meta name="msapplication-TileColor" content="#777777">
+    <meta name="theme-color" content="#777777">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <script>
+        // ============ BARRA SUPERIOR E MENU ============
+        const navbar = document.getElementById('navbar');
+        const menuToggle = document.getElementById('menuToggle');
+        const offcanvasMenu = document.getElementById('offcanvasMenu');
+        const overlay = document.getElementById('overlay');
+        let isMenuOpen = false;
+
+        // Mostrar/ocultar barra ao rolar
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 100) {
+                navbar.classList.add('visible');
+            } else {
+                navbar.classList.remove('visible');
+            }
+        });
+
+        // Abrir/fechar menu
+        menuToggle.addEventListener('click', function() {
+            isMenuOpen = !isMenuOpen;
+            
+            if (isMenuOpen) {
+                menuToggle.classList.add('active');
+                offcanvasMenu.classList.add('open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menuToggle.classList.remove('active');
+                offcanvasMenu.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Fechar menu ao clicar no overlay
+        overlay.addEventListener('click', function() {
+            isMenuOpen = false;
+            menuToggle.classList.remove('active');
+            offcanvasMenu.classList.remove('open');
+            this.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // Fechar menu ao clicar em um link
+        document.querySelectorAll('.menu-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                isMenuOpen = false;
+                menuToggle.classList.remove('active');
+                offcanvasMenu.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // ============ CARROSSEL MOBILE ============
+        let currentIndexMobile = 0;
+        const carouselInnerMobile = document.querySelector('.carousel-inner');
+        const indicatorsMobile = document.querySelectorAll('.indicator');
+        let autoSlideIntervalMobile = null;
+        const slideInterval = 4000; // 4 segundos
+        let carouselStarted = false;
+
+        // Observador de interseção para iniciar o carrossel quando visível
+        const carouselObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !carouselStarted) {
+                    startCarousel();
+                    carouselStarted = true;
+                }
+            });
+        }, { threshold: 0.5 });
+
+        // Iniciar observação do carrossel
+        if (window.innerWidth <= 768) {
+            const carousel = document.querySelector('.carousel');
+            if (carousel) {
+                carouselObserver.observe(carousel);
+            }
+        }
+
+        // Configurar redimensionamento
+        window.addEventListener('resize', function() {
+            if (window.innerWidth <= 768) {
+                const carousel = document.querySelector('.carousel');
+                if (carousel && !carouselStarted) {
+                    carouselObserver.observe(carousel);
+                }
+            } else {
+                stopCarousel();
+                carouselStarted = false;
+            }
+        });
+
+        function startCarousel() {
+            if (autoSlideIntervalMobile === null) {
+                autoSlideIntervalMobile = setInterval(() => {
+                    moveCarousel(1);
+                }, slideInterval);
+            }
+        }
+
+        function stopCarousel() {
+            if (autoSlideIntervalMobile !== null) {
+                clearInterval(autoSlideIntervalMobile);
+                autoSlideIntervalMobile = null;
+            }
+        }
+
+        function initCarouselMobile() {
+            updateCarouselMobile();
+            
+            indicatorsMobile.forEach(indicator => {
+                indicator.addEventListener('click', () => {
+                    currentIndexMobile = parseInt(indicator.getAttribute('data-index'));
+                    updateCarouselMobile();
+                    resetCarousel();
+                });
+            });
+        }
+
+        function updateCarouselMobile() {
+            carouselInnerMobile.style.transform = `translateX(-${currentIndexMobile * 100}%)`;
+            
+            indicatorsMobile.forEach((indicator, index) => {
+                if (index === currentIndexMobile) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+
+        function moveCarousel(direction) {
+            currentIndexMobile += direction;
+            
+            if (currentIndexMobile < 0) {
+                currentIndexMobile = 5;
+            } else if (currentIndexMobile > 5) {
+                currentIndexMobile = 0;
+            }
+            
+            updateCarouselMobile();
+        }
+
+        function resetCarousel() {
+            stopCarousel();
+            startCarousel();
+        }
+
+        // Inicializar carrossel se estiver em mobile
+        if (window.innerWidth <= 768) {
+            initCarouselMobile();
+        }
+
+        // ============ MODAIS DESKTOP ============
+        function openModal(modalId) {
+            document.getElementById(modalId + '-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // Fechar modais desktop ao clicar fora
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal(modal.id);
+                }
+            });
+        });
+
+        // ============ MODAL MOBILE ============
+        const mobileModalData = [
+            {
+                title: "DIREITO MÉDICO",
+                image: "https://i.ibb.co/rGwZyS2q/Direito-M-dico-CANSI-ADVOGADOS.png",
+                text: "O Direito Médico trata das relações jurídicas entre médicos, pacientes, instituições de saúde e o Estado, regulando responsabilidades, deveres éticos e direitos envolvidos na prática médica. No CANSI ADVOGADOS, atuamos na defesa de médicos e profissionais da saúde em casos de iatrogenia, responsabilidade civil médica, e na estruturação jurídica e empresarial de suas carreiras, com foco especial nos recém-formados. Também representamos pacientes em ações judiciais para obtenção de medicamentos e tratamentos negados de forma indevida pelo SUS ou planos de saúde."
+            },
+            {
+                title: "DIREITO DO AGRONEGÓCIO",
+                image: "https://i.ibb.co/FLV3G10R/Direito-do-Agroneg-cio-CANSI-ADVOGADOS.png",
+                text: "O Direito do Agronegócio envolve normas que regulam as atividades produtivas e comerciais do setor agropecuário, abrangendo aspectos contratuais, fundiários, ambientais, trabalhistas e comerciais. Prestamos assessoria na negociação de contratos rurais, compra e venda de propriedades, regularização fundiária, e conformidade ambiental e trabalhista. Atuamos também na orientação jurídica sobre cultivo e negociação de commodities agrícolas, protegendo os interesses do produtor e garantindo a legalidade das operações."
+            },
+            {
+                title: "DIREITO DESPORTIVO",
+                image: "https://i.ibb.co/gFjPqkfN/Direito-Desportivo-CANSI-ADVOGADOS.png",
+                text: "O Direito Desportivo trata das normas que regem as relações jurídicas no âmbito esportivo, envolvendo atletas, clubes, federações, patrocinadores e demais agentes do setor. Atuamos na elaboração de contratos de transferência, patrocínio e imagem; resolução de disputas disciplinares e casos de doping; proteção dos direitos dos atletas; consultoria em marketing desportivo; e orientação regulatória para empresas e profissionais do esporte."
+            },
+            {
+                title: "DIREITO DE FAMÍLIA E SUCESSÕES",
+                image: "https://i.ibb.co/8D6z8dnQ/Direito-de-Fam-lia-CANSI-ADVOGADOS.png",
+                text: "Essa área do direito regula as relações familiares e a transferência de bens e direitos após a morte, zelando pela proteção das pessoas e do patrimônio familiar. Atuamos em ações de alimentos, guarda e convivência, divórcios consensuais e litigiosos. No âmbito sucessório, conduzimos inventários, partilhas, testamentos e orientações sobre heranças, sempre buscando soluções eficazes e respeitosas às particularidades de cada família."
+            },
+            {
+                title: "DIREITO EMPRESARIAL",
+                image: "https://i.ibb.co/WvCkyLVf/Direito-Empresarial-CANSI-ADVOGADOS.png",
+                text: "O Direito Empresarial, também conhecido como Direito Comercial, regula as atividades empresariais e as relações entre empresas. No CANSI ADVOGADOS, oferecemos assessoria jurídica completa para empresas de todos os portes e segmentos. Nosso escritório atua na constituição e reestruturação de empresas, elaboração e análise de contratos empresariais, fusões e aquisições, recuperação judicial e falência."
+            },
+            {
+                title: "DIREITO TRIBUTÁRIO",
+                image: "https://i.ibb.co/yBWXYffR/Direito-Tribut-rio-CANSI-ADVOGADOS.png",
+                text: "O Direito Tributário regula a relação entre o contribuinte e o Estado, tratando da arrecadação, fiscalização e contencioso relacionado a tributos. Prestamos consultoria preventiva, planejamento tributário, recuperação de créditos, regularização de débitos fiscais, e representação em processos administrativos e judiciais, garantindo conformidade e economia para empresas e profissionais."
+            }
+        ];
+
+        function openMobileModal(index) {
+            const modal = document.getElementById('mobile-modal');
+            const modalImage = document.getElementById('modal-image');
+            const modalTitle = document.getElementById('modal-title');
+            const modalText = document.getElementById('modal-text');
+            
+            modalImage.src = mobileModalData[index].image;
+            modalTitle.textContent = mobileModalData[index].title;
+            modalText.textContent = mobileModalData[index].text;
+            
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileModal() {
+            document.getElementById('mobile-modal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // Fechar modal mobile ao clicar fora
+        document.getElementById('mobile-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeMobileModal();
+            }
+        });
+
+        // Fechar todos os modais com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Fechar modais desktop
+                document.querySelectorAll('.modal').forEach(modal => {
+                    if (modal.style.display === 'flex') {
+                        closeModal(modal.id);
+                    }
+                });
+                
+                // Fechar modal mobile
+                if (document.getElementById('mobile-modal').style.display === 'flex') {
+                    closeMobileModal();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
